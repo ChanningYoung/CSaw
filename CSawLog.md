@@ -1,5 +1,11 @@
 # 2020/9/12
 
-* Verilator笔记：从Verilog到C++
+* Verilator Note：From Verilog to C++
 
-- Chisel笔记：用SBT生成Verilog文件、跑scala测试
+- Chisel Note：
+    - Generate Verilog with SBT
+    - Run Scala testbench 
+
+# 2020/9/13
+
+* Implement `RegFile` with Scala testbench

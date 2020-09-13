@@ -19,6 +19,6 @@ class RegFile extends Module {
     r(io.waddr) := io.wdata
   }
   (io.raddr zip io.rdata).map {
-    case (a, d) => d := Mux(a =/= 0.U, r(a), 0.U(XLEN.W))
+    case (a, d) => d := Mux(a =/= 0.U, r(a), 0.U(XLEN.W))   // r(0) gives 0
   }
 }
