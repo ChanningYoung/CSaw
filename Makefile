@@ -1,7 +1,10 @@
 SCALA_SRC_DIR = src/main/scala
+SCALA_TEST_DIR = src/test/scala
 
 TEST_CXX_DIR = src/test/csrc
 TEST_RUN_DIR = test_run_dir
+
+RF_SCALA = $(SCALA_SRC_DIR)/core/RegFile.scala $(SCALA_TEST_DIR)/core/RegFileTest.scala
 
 ALU_SCALA = $(SCALA_SRC_DIR)/core/ALU.scala
 
@@ -11,7 +14,10 @@ ALU_OBJ_DIR = $(TEST_RUN_DIR)/alu
 ALU_OBJ_MK = VALU.mk
 ALU_EXE = alu_sim
 
-.PHONY: aluTest clean
+.PHONY: regfileTest aluTest clean
+
+regfileTest: $(RF_SCALA)
+	sbt 'test:runMain core.RegFileMain'
 
 aluTest: $(ALU_OBJ_DIR)/$(ALU_EXE)
 	./$(ALU_OBJ_DIR)/$(ALU_EXE)

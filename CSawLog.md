@@ -14,4 +14,6 @@
 
 * Implement `ALU` with C++ testbench (run with `make aluTest`)
 
+* Integrated `RegFile` test in `Makefile` (`make regfileTest`)
+
 - Update Verilator Note: Using absolute path
