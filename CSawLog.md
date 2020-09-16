@@ -9,3 +9,9 @@
 # 2020/9/13
 
 * Implement `RegFile` with Scala testbench
+
+# 2020/9/16
+
+* Implement `ALU` with C++ testbench (run with `make aluTest`)
+
+- Update Verilator Note: Using absolute path

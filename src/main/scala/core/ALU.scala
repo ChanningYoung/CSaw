@@ -2,6 +2,7 @@ package core
 
 import chisel3._
 import chisel3.util._
+import chisel3.stage.ChiselStage
 
 import constants.Constants._
 import constants.Configurations._
@@ -44,4 +45,10 @@ class ALU extends Module {
     (op === ALU_SLT)  -> (resultAdder(XLEN-1) ^ overflow),
     (op === ALU_SLTU) -> carryout
   ))
+}
+
+object AluElaborate extends App {
+  (new ChiselStage).execute(
+    args, Seq(stage.ChiselGeneratorAnnotation(() => new ALU))
+  )
 }

@@ -1,7 +1,5 @@
 package core
 
-import java.sql.Driver
-
 import chisel3.iotesters
 import chisel3.iotesters.PeekPokeTester
 import chisel3.stage.ChiselStage
