@@ -2,7 +2,11 @@ package constants
 
 import chisel3._
 
+import Configurations._
+
 object Constants extends ALUConstants
+  with PrivilegedConstants
+  with MemoryOpConstants
 {
 }
 
@@ -22,4 +26,12 @@ trait ALUConstants {
   val ALU_XOR   = 7.U(AluOpBits.W)
   val ALU_SLT   = 8.U(AluOpBits.W)
   val ALU_SLTU  = 9.U(AluOpBits.W)
+}
+
+trait PrivilegedConstants {
+  val START_ADDR = 0.U(XLEN.W)
+}
+
+trait MemoryOpConstants {
+  val MemFuncBits = 3
 }

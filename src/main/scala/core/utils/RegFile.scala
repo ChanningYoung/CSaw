@@ -1,7 +1,6 @@
-package core
+package core.utils
 
 import chisel3._
-
 import constants.Configurations._
 
 class RegFile extends Module {
