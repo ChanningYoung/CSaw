@@ -3,7 +3,6 @@ package core
 import chisel3.iotesters
 import chisel3.iotesters.PeekPokeTester
 import chisel3.stage.ChiselStage
-import core.utils.RegFile
 
 import scala.util.Random
 

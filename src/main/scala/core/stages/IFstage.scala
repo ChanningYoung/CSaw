@@ -19,5 +19,7 @@ class IFstageIO extends Bundle {
 class IFstage extends Module {
   val io = IO(new IFstageIO)
 
-  val fsValid = RegInit(0.U(1.W))
+  val fsValid = RegInit(false.B)
+  val fsReadyGo = true.B
+  val fsAllowIn = !fsValid || fsReadyGo || io.fs.ready
 }
