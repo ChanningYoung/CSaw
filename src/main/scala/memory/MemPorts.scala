@@ -8,14 +8,13 @@ import constants.Constants._
 
 class MemPortIO extends Bundle {
   val req = new DecoupledIO(new MemReq)
-  val resp = Flipped(new DecoupledIO(new MemResp))
+  val resp = Flipped(new ValidIO(new MemResp))
 }
 
 class MemReq extends Bundle {
   val addr = Output(UInt(XLEN.W))
   val wdata = Output(UInt(XLEN.W))
-  val func = Output(UInt(MemFuncBits.W))
-  val typ = Output(UInt(1.W))
+  val wen = Output(UInt(XBytes.W))
 }
 
 class MemResp extends Bundle {

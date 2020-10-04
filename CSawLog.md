@@ -17,3 +17,9 @@
 * Integrated `RegFile` test in `Makefile` (`make regfileTest`)
 
 - Update Verilator Note: Using absolute path
+
+# 2020/10/4
+
+- Starting 5-stage pipeline
+    - Simple instruction fetch stage
+    - Instruction listing of RV64I

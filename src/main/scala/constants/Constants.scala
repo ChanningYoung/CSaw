@@ -29,9 +29,45 @@ trait ALUConstants {
 }
 
 trait PrivilegedConstants {
-  val START_ADDR = 0.U(XLEN.W)
+  val START_ADDR = 0x8000000.U(XLEN.W)
 }
 
 trait MemoryOpConstants {
-  val MemFuncBits = 3
+  // codes for wen
+  val MW_LD = 0x00.U(XBytes.U)
+}
+
+trait DecoderConstants {
+  val Y = true.B
+  val N = false.B
+
+  // PC select
+  val PC_4      = 0.U(2.W)
+  val PC_BRJMP  = 1.U(2.W)
+  val PC_JALR   = 2.U(2.W)
+  val PC_EXC    = 3.U(2.W)
+
+  // Branch type
+  val BR_N    = 0.U(4.W)
+  val BR_EQ   = 1.U(4.W)
+  val BR_NE   = 2.U(4.W)
+  val BR_LT   = 3.U(4.W)
+  val BR_GE   = 4.U(4.W)
+  val BR_LTU  = 5.U(4.W)
+  val BR_GEU  = 6.U(4.W)
+  val BR_J    = 7.U(4.W)
+  val BR_JR   = 8.U(4.W)
+
+  // ALU Operand 1 select
+  val OP1_RS1 = 0.U(2.W)
+  val OP1_PC  = 1.U(2.W)
+  val OP1_IMZ = 2.U(2.W)
+
+  // ALU Operand 2 select
+  val OP2_RS2   = 0.U(3.W)
+  val OP2_IIMM  = 1.U(3.W)
+  val OP2_SIMM  = 2.U(3.W)
+  val OP2_BIMM  = 3.U(3.W)
+  val OP2_UIMM  = 4.U(3.W)
+  val OP2_JIMM  = 5.U(3.W)
 }
