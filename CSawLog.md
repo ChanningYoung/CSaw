@@ -23,3 +23,9 @@
 - Starting 5-stage pipeline
     - Simple instruction fetch stage
     - Instruction listing of RV64I
+
+# 2020/10/7
+
+- Start implementing decoder
+
+- Built simple instruction decode stage in pipeline

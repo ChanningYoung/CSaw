@@ -42,7 +42,9 @@ class ALU extends Module {
     (op === ALU_OR)   -> (src1 | src2),
     (op === ALU_XOR)  -> (src1 ^ src2),
     (op === ALU_SLT)  -> (resultAdder(XLEN-1) ^ overflow),
-    (op === ALU_SLTU) -> carryout
+    (op === ALU_SLTU) -> carryout,
+    (op === ALU_COPY1)-> src1,
+    (op === ALU_COPY2)-> src2
   ))
 }
 
