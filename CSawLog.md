@@ -28,4 +28,6 @@
 
 - Start implementing decoder
 
-- Built simple instruction decode stage in pipeline
+- 5-stage pipeline:
+    - Instruction Decode stage
+    - Execution stage
