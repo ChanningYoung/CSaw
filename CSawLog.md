@@ -31,3 +31,7 @@
 - 5-stage pipeline:
     - Instruction Decode stage
     - Execution stage
+
+# 2020/10/8
+
+- 5-stage pipeline: Memory stage

@@ -63,6 +63,7 @@ class EXEstage extends Module {
   io.dmem.bits.addr := aluResult
   /* TODO */
   io.dmem.bits.wdata := DontCare
+  // TODO: dmem.ready
 
   io.es.bits.pc := es_r.pc
   io.es.bits.regDest := es_r.regDest
