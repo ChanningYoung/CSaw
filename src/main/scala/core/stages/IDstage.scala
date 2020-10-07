@@ -39,8 +39,6 @@ class IDstageIO extends Bundle {
 class IDstage extends Module {
   val io = IO(new IDstageIO)
 
-  val fs_pc = io.fs.bits.pc
-
   // ID stage
   val dsValid = RegEnable(next = io.fs.valid, init = false.B, enable = io.fs.ready)
   val dsReadyGo = true.B
@@ -59,7 +57,7 @@ class IDstage extends Module {
   // control signals
   val csignals =
     ListLookup(ds_r.inst,
-      List(N, BR_N, OP1_X,  OP2_X,    RFR_0, RFR_0, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
+                      List(N, BR_N, OP1_X,  OP2_X,    RFR_0, RFR_0, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
       Array(          /* val | BR | OP1   | OP2     | RS1   | RS2 | ALU     | WB    | RF    | MEM   | MEM   | MEM | CSR | fence
                        inst | type | sel  | sel     | read  | read |  op    | sel   | wen   | read  | wen   | mask | type | I */
         LUI       -> List(Y, BR_N,  OP1_X,  OP2_UIMM, RFR_0, RFR_0, ALU_COPY2,WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N)
