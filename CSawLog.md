@@ -34,4 +34,4 @@
 
 # 2020/10/8
 
-- 5-stage pipeline: Memory stage
+- Finished 5-stage pipeline: Memory & Writeback stage
