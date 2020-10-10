@@ -30,9 +30,10 @@ class IFstage extends Module {
   val nextpc = Mux(io.br.taken, io.br.target, seq_pc)
 
   // IF stage
+  val fsAllowIn = Wire(Bool())
   val fsValid = RegEnable(next = toFsValid, init = false.B, enable = fsAllowIn)
   val fsReadyGo = true.B
-  val fsAllowIn = !fsValid || fsReadyGo && io.fs.ready
+  fsAllowIn := !fsValid || fsReadyGo && io.fs.ready
   io.fs.valid := fsValid && fsReadyGo
   when (toFsValid && fsAllowIn) {
     fs_pc_reg := nextpc

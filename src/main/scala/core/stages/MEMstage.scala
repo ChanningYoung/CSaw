@@ -34,13 +34,13 @@ class MEMstage extends Module {
   // TODO: dmem.valid
   val memResult = io.dmem.bits.rdata
 
-  val msFinalRes = MuxCase(DontCare, Array(
+  val msFinalRes = MuxCase(0.U, Array(
     (ms_r.wb_sel === WB_ALU)  -> ms_r.aluResult,
     /* TODO */
-    (ms_r.wb_sel === WB_PC4)  -> DontCare,
+    (ms_r.wb_sel === WB_PC4)  -> 0.U,
     (ms_r.wb_sel === WB_MEM)  -> memResult,
     /* TODO */
-    (ms_r.wb_sel === WB_CSR)  -> DontCare
+    (ms_r.wb_sel === WB_CSR)  -> 0.U
   ))
 
   io.ms.bits.pc := ms_r.pc
