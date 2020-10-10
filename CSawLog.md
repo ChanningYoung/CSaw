@@ -35,3 +35,9 @@
 # 2020/10/8
 
 - Finished 5-stage pipeline: Memory & Writeback stage
+
+# 2020/10/10
+
+- Completed initial 5-stage core with LUI
+
+- Implemented scala test of LUI and verified with waveform
