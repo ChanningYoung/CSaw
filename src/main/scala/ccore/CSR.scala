@@ -1,4 +1,4 @@
-package core
+package ccore
 
 import chisel3._
 

@@ -1,4 +1,4 @@
-package core
+package ccore
 
 import chisel3.iotesters
 import chisel3.iotesters.PeekPokeTester

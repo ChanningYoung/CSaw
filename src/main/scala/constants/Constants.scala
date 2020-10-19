@@ -35,7 +35,7 @@ trait ALUConstants {
 }
 
 trait PrivilegedConstants {
-  val START_ADDR = 0x80000000.U(XLEN.W)
+  val START_ADDR = 0x80000000L.U(XLEN.W)
 }
 
 trait MemoryOpConstants {

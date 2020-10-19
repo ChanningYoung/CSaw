@@ -4,9 +4,9 @@ SCALA_TEST_DIR = src/test/scala
 TEST_CXX_DIR = src/test/csrc
 TEST_RUN_DIR = test_run_dir
 
-RF_SCALA = $(SCALA_SRC_DIR)/core/RegFile.scala $(SCALA_TEST_DIR)/core/RegFileTest.scala
+RF_SCALA = $(SCALA_SRC_DIR)/ccore/RegFile.scala $(SCALA_TEST_DIR)/ccore/RegFileTest.scala
 
-ALU_SCALA = $(SCALA_SRC_DIR)/core/ALU.scala
+ALU_SCALA = $(SCALA_SRC_DIR)/ccore/ALU.scala
 
 ALU_VERILOG = $(TEST_RUN_DIR)/ALU.v
 ALU_CXX = $(TEST_CXX_DIR)/alu/alu_main.cpp
@@ -17,7 +17,7 @@ ALU_EXE = alu_sim
 .PHONY: regfileTest aluTest clean
 
 regfileTest: $(RF_SCALA)
-	sbt 'test:runMain core.RegFileMain'
+	sbt 'test:runMain ccore.RegFileMain'
 
 aluTest: $(ALU_OBJ_DIR)/$(ALU_EXE)
 	./$(ALU_OBJ_DIR)/$(ALU_EXE)
@@ -30,7 +30,7 @@ $(ALU_OBJ_DIR)/$(ALU_OBJ_MK): $(ALU_VERILOG) $(ALU_CXX)
 		$< $(abspath $(ALU_CXX))
 
 $(ALU_VERILOG): $(ALU_SCALA)
-	sbt 'runMain core.AluElaborate -td $(TEST_RUN_DIR)'
+	sbt 'runMain ccore.AluElaborate -td $(TEST_RUN_DIR)'
 
 clean:
 	rm -rf $(TEST_RUN_DIR)
