@@ -4,7 +4,22 @@ SCALA_TEST_DIR = src/test/scala
 TEST_CXX_DIR = src/test/csrc
 TEST_RUN_DIR = test_run_dir
 
+SCALA_FILE = $(shell find ./src/main/scala -name "*.scala")
+TOP = CSawSimTop
+TOP_V = $(TEST_RUN_DIR)/$(TOP).v
+
+verilog: $(TOP_V)
+
+$(TOP_V): $(SCALA_FILE)
+	sbt 'runMain sim.$(TOP)Elaborate -td $(TEST_RUN_DIR)'
+
+.PHONY: regfileTest aluTest clean
+
 RF_SCALA = $(SCALA_SRC_DIR)/ccore/RegFile.scala $(SCALA_TEST_DIR)/ccore/RegFileTest.scala
+
+regfileTest: $(RF_SCALA)
+	sbt 'test:runMain ccore.RegFileMain'
+
 
 ALU_SCALA = $(SCALA_SRC_DIR)/ccore/ALU.scala
 
@@ -13,11 +28,6 @@ ALU_CXX = $(TEST_CXX_DIR)/alu/alu_main.cpp
 ALU_OBJ_DIR = $(TEST_RUN_DIR)/alu
 ALU_OBJ_MK = VALU.mk
 ALU_EXE = alu_sim
-
-.PHONY: regfileTest aluTest clean
-
-regfileTest: $(RF_SCALA)
-	sbt 'test:runMain ccore.RegFileMain'
 
 aluTest: $(ALU_OBJ_DIR)/$(ALU_EXE)
 	./$(ALU_OBJ_DIR)/$(ALU_EXE)
