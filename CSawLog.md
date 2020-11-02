@@ -41,3 +41,8 @@
 - Completed initial 5-stage core with LUI
 
 - Implemented scala test of LUI and verified with waveform
+
+# 2020/11/2
+
+- Implemented logic to clear IF stage when wrong inst is fetched because of branching
+

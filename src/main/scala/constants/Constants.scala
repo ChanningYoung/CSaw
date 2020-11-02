@@ -47,12 +47,6 @@ trait DecoderConstants {
   val Y = true.B
   val N = false.B
 
-  // PC select
-  val PC_4      = 0.U(2.W)
-  val PC_BRJMP  = 1.U(2.W)
-  val PC_JALR   = 2.U(2.W)
-  val PC_EXC    = 3.U(2.W)
-
   // Branch type
   val BR_N    = 0.U(4.W)
   val BR_EQ   = 1.U(4.W)
@@ -77,6 +71,7 @@ trait DecoderConstants {
   val OP2_BIMM  = 3.U(3.W)
   val OP2_UIMM  = 4.U(3.W)
   val OP2_JIMM  = 5.U(3.W)
+  val OP2_LINK  = 6.U(3.W)  // For Jump and Link
   val OP2_X     = 0.U(3.W)
 
   // Read register (for detecting hazards)
@@ -92,8 +87,7 @@ trait DecoderConstants {
   // Writeback select
   val WB_ALU  = 0.U(2.W)
   val WB_MEM  = 1.U(2.W)
-  val WB_PC4  = 2.U(2.W)
-  val WB_CSR  = 3.U(2.W)
+  val WB_CSR  = 2.U(2.W)
   val WB_X    = 0.U(2.W)
 
   // Memory write

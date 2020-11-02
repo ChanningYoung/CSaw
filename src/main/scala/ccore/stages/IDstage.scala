@@ -53,6 +53,7 @@ class IDstage extends Module {
 
   // immediates
   val uimm = Cat(Fill(33, ds_r.inst(31)), ds_r.inst(30, 12), Fill(12, 0.U))
+  val jimm = Cat(Fill(44, ds_r.inst(31)), ds_r.inst(19, 12), ds_r.inst(20), ds_r.inst(30, 21), Fill(1, 0.U))
 
   // control signals
   val csignals =
@@ -61,13 +62,13 @@ class IDstage extends Module {
       Array(          /* val | BR | OP1   | OP2     | RS1   | RS2 | ALU     | WB    | RF    | MEM   | MEM   | MEM | CSR | fence
                        inst | type | sel  | sel     | read  | read |  op    | sel   | wen   | read  | wen   | mask | type | I */
         LUI       -> List(Y, BR_N,  OP1_X,  OP2_UIMM, RFR_0, RFR_0, ALU_COPY2,WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
-        AUIPC     -> List(Y, BR_N,  OP1_PC, OP2_UIMM, RFR_0, RFR_0, ALU_ADD,  WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N)
+        AUIPC     -> List(Y, BR_N,  OP1_PC, OP2_UIMM, RFR_0, RFR_0, ALU_ADD,  WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
+
+        JAL       -> List(Y, BR_J,  OP1_PC, OP2_LINK, RFR_0, RFR_0, ALU_ADD,  WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N)
       ))
 
   val (val_inst: Bool) :: br_type :: op1_sel :: op2_sel :: (rs1_read: Bool) :: (rs2_read: Bool) :: (alu_op) :: cs0 = csignals
   val wb_sel :: (rf_wen: Bool) :: (mem_rd: Bool) :: (mem_wr: Bool) :: mem_msk :: csr_type :: (fence_i: Bool) :: Nil = cs0
-
-  val pc_sel = PC_4
 
   // RegFile
   val rf = Module(new RegFile)
@@ -83,9 +84,11 @@ class IDstage extends Module {
   val rs1_eq_rs2 = (rs1_value === rs2_value)
 
   // TODO
-  io.br.taken := false.B
-  io.br.target := DontCare
+  // Branch control
+  io.br.taken := (br_type === BR_J)
+  io.br.target := ds_r.pc + jimm
 
+  // stage output to exe stage
   io.ds.bits.pc := ds_r.pc
   io.ds.bits.regDest := rd
   io.ds.bits.imm := MuxCase(DontCare, Array(

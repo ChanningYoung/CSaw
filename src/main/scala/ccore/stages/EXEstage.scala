@@ -46,7 +46,8 @@ class EXEstage extends Module {
     (es_r.op2_sel === OP2_SIMM) -> es_r.imm,
     (es_r.op2_sel === OP2_BIMM) -> es_r.imm,
     (es_r.op2_sel === OP2_UIMM) -> es_r.imm,
-    (es_r.op2_sel === OP2_JIMM) -> es_r.imm
+    (es_r.op2_sel === OP2_JIMM) -> es_r.imm,
+    (es_r.op2_sel === OP2_LINK) -> InsBytes.U(XLEN.W)
   ))
 
   // ALU
