@@ -53,6 +53,7 @@ class IDstage extends Module {
 
   // immediates
   val iimm = Cat(Fill(XLEN-11, ds_r.inst(31)), ds_r.inst(30, 20))
+  val bimm = Cat(Fill(XLEN-12, ds_r.inst(31)), ds_r.inst(7), ds_r.inst(30, 25), ds_r.inst(11, 8), Fill(1, 0.U))
   val uimm = Cat(Fill(XLEN-31, ds_r.inst(31)), ds_r.inst(30, 12), Fill(12, 0.U))
   val jimm = Cat(Fill(XLEN-20, ds_r.inst(31)), ds_r.inst(19, 12), ds_r.inst(20), ds_r.inst(30, 21), Fill(1, 0.U))
 
@@ -66,7 +67,14 @@ class IDstage extends Module {
         AUIPC     -> List(Y, BR_N,  OP1_PC, OP2_UIMM, RFR_0, RFR_0, ALU_ADD,  WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
 
         JAL       -> List(Y, BR_J,  OP1_PC, OP2_LINK, RFR_0, RFR_0, ALU_ADD,  WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
-        JALR      -> List(Y, BR_JR, OP1_PC, OP2_LINK, RFR_1, RFR_0, ALU_ADD,  WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N)
+        JALR      -> List(Y, BR_JR, OP1_PC, OP2_LINK, RFR_1, RFR_0, ALU_ADD,  WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
+
+        BEQ       -> List(Y, BR_EQ, OP1_X,  OP2_X,    RFR_1, RFR_1, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
+        BNE       -> List(Y, BR_NE, OP1_X,  OP2_X,    RFR_1, RFR_1, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
+        BLT       -> List(Y, BR_LT, OP1_X,  OP2_X,    RFR_1, RFR_1, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
+        BGE       -> List(Y, BR_GE, OP1_X,  OP2_X,    RFR_1, RFR_1, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
+        BLTU      -> List(Y, BR_LTU,OP1_X,  OP2_X,    RFR_1, RFR_1, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
+        BGEU      -> List(Y, BR_GEU,OP1_X,  OP2_X,    RFR_1, RFR_1, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N)
       ))
 
   val (val_inst: Bool) :: br_type :: op1_sel :: op2_sel :: (rs1_read: Bool) :: (rs2_read: Bool) :: (alu_op) :: cs0 = csignals
@@ -87,12 +95,27 @@ class IDstage extends Module {
 
   // TODO
   // Branch control
-  io.br.taken := (br_type === BR_J) || (br_type === BR_JR)
+  io.br.taken := dsValid && (
+    (br_type === BR_J) || (br_type === BR_JR)
+    || (br_type === BR_EQ && rs1_value === rs2_value)
+    || (br_type === BR_NE && rs1_value =/= rs2_value)
+    || (br_type === BR_LT && rs1_value.asSInt() < rs2_value.asSInt())
+    || (br_type === BR_GE && rs1_value.asSInt() >= rs2_value.asSInt())
+    || (br_type === BR_LTU && rs1_value < rs2_value)
+    || (br_type === BR_GEU && rs1_value >= rs2_value)
+    )
 
   val jalr_target = rs1_value + iimm
+  val br_target = ds_r.pc + bimm
   io.br.target := MuxCase(DontCare, Array(
     (br_type === BR_J)  -> (ds_r.pc + jimm),
-    (br_type === BR_JR) -> Cat(jalr_target(XLEN-1, 1), Fill(1, 0.U))
+    (br_type === BR_JR) -> Cat(jalr_target(XLEN-1, 1), Fill(1, 0.U)),
+    (br_type === BR_EQ) -> br_target,
+    (br_type === BR_NE) -> br_target,
+    (br_type === BR_LT) -> br_target,
+    (br_type === BR_GE) -> br_target,
+    (br_type === BR_LTU)-> br_target,
+    (br_type === BR_GEU)-> br_target
   ))
 
   // stage output to exe stage
