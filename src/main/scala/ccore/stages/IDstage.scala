@@ -52,8 +52,9 @@ class IDstage extends Module {
   val rd = ds_r.inst(11, 7)
 
   // immediates
-  val uimm = Cat(Fill(33, ds_r.inst(31)), ds_r.inst(30, 12), Fill(12, 0.U))
-  val jimm = Cat(Fill(44, ds_r.inst(31)), ds_r.inst(19, 12), ds_r.inst(20), ds_r.inst(30, 21), Fill(1, 0.U))
+  val iimm = Cat(Fill(XLEN-11, ds_r.inst(31)), ds_r.inst(30, 20))
+  val uimm = Cat(Fill(XLEN-31, ds_r.inst(31)), ds_r.inst(30, 12), Fill(12, 0.U))
+  val jimm = Cat(Fill(XLEN-20, ds_r.inst(31)), ds_r.inst(19, 12), ds_r.inst(20), ds_r.inst(30, 21), Fill(1, 0.U))
 
   // control signals
   val csignals =
@@ -64,7 +65,8 @@ class IDstage extends Module {
         LUI       -> List(Y, BR_N,  OP1_X,  OP2_UIMM, RFR_0, RFR_0, ALU_COPY2,WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
         AUIPC     -> List(Y, BR_N,  OP1_PC, OP2_UIMM, RFR_0, RFR_0, ALU_ADD,  WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
 
-        JAL       -> List(Y, BR_J,  OP1_PC, OP2_LINK, RFR_0, RFR_0, ALU_ADD,  WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N)
+        JAL       -> List(Y, BR_J,  OP1_PC, OP2_LINK, RFR_0, RFR_0, ALU_ADD,  WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
+        JALR      -> List(Y, BR_JR, OP1_PC, OP2_LINK, RFR_1, RFR_0, ALU_ADD,  WB_ALU, RFW_1, MEMR_0, MEMW_0, MSK_X, CSR.N, N)
       ))
 
   val (val_inst: Bool) :: br_type :: op1_sel :: op2_sel :: (rs1_read: Bool) :: (rs2_read: Bool) :: (alu_op) :: cs0 = csignals
@@ -85,8 +87,13 @@ class IDstage extends Module {
 
   // TODO
   // Branch control
-  io.br.taken := (br_type === BR_J)
-  io.br.target := ds_r.pc + jimm
+  io.br.taken := (br_type === BR_J) || (br_type === BR_JR)
+
+  val jalr_target = rs1_value + iimm
+  io.br.target := MuxCase(DontCare, Array(
+    (br_type === BR_J)  -> (ds_r.pc + jimm),
+    (br_type === BR_JR) -> Cat(jalr_target(XLEN-1, 1), Fill(1, 0.U))
+  ))
 
   // stage output to exe stage
   io.ds.bits.pc := ds_r.pc
