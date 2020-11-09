@@ -44,6 +44,6 @@
 
 # 2020/11/2
 
-- Implemented unconditional jump inst JAL & JALR
-    - Implemented logic to clear IF stage when wrong inst is fetched because of branching
-
+- Implemented logic to clear IF stage when wrong inst is fetched because of branching
+    - Implemented unconditional jump inst JAL & JALR
+    - Implemented conditional branches
