@@ -74,7 +74,9 @@ class IDstage extends Module {
         BLT       -> List(Y, BR_LT, OP1_X,  OP2_X,    RFR_1, RFR_1, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
         BGE       -> List(Y, BR_GE, OP1_X,  OP2_X,    RFR_1, RFR_1, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
         BLTU      -> List(Y, BR_LTU,OP1_X,  OP2_X,    RFR_1, RFR_1, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
-        BGEU      -> List(Y, BR_GEU,OP1_X,  OP2_X,    RFR_1, RFR_1, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N)
+        BGEU      -> List(Y, BR_GEU,OP1_X,  OP2_X,    RFR_1, RFR_1, ALU_X,    WB_X,   RFW_0, MEMR_0, MEMW_0, MSK_X, CSR.N, N),
+
+        LD        -> List(Y, BR_N,  OP1_RS1,OP2_IIMM, RFR_1, RFR_0, ALU_ADD,  WB_MEM, RFW_1, MEMR_1, MEMW_0, MSK_D, CSR.N, N)
       ))
 
   val (val_inst: Bool) :: br_type :: op1_sel :: op2_sel :: (rs1_read: Bool) :: (rs2_read: Bool) :: (alu_op) :: cs0 = csignals
@@ -122,6 +124,7 @@ class IDstage extends Module {
   io.ds.bits.pc := ds_r.pc
   io.ds.bits.regDest := rd
   io.ds.bits.imm := MuxCase(DontCare, Array(
+    (op2_sel === OP2_IIMM)  -> iimm,
     (op2_sel === OP2_UIMM)  -> uimm
   ))
   io.ds.bits.rs1_value := rs1_value

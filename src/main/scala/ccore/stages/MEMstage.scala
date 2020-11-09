@@ -36,8 +36,6 @@ class MEMstage extends Module {
 
   val msFinalRes = MuxCase(0.U, Array(
     (ms_r.wb_sel === WB_ALU)  -> ms_r.aluResult,
-    /* TODO */
-    (ms_r.wb_sel === WB_PC4)  -> 0.U,
     (ms_r.wb_sel === WB_MEM)  -> memResult,
     /* TODO */
     (ms_r.wb_sel === WB_CSR)  -> 0.U
